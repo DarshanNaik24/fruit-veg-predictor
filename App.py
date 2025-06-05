@@ -1,6 +1,8 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
+import packages  # Forces TensorFlow install
+
 
 # Set background image with blur and transparency using CSS
 def add_bg_from_url():
