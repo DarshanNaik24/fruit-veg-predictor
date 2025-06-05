@@ -68,17 +68,33 @@ elif app_mode == "About Project":
 # Prediction Page
 elif app_mode == "Prediction":
     st.header("Model Prediction")
+
     test_image = st.file_uploader("Choose an Image:")
-    if st.button("Show Image") and test_image is not None:
-        st.image(test_image, width=4, use_column_width=True)
+
+    # Store image in session state
+    if test_image is not None:
+        st.session_state['uploaded_image'] = test_image
+
+    # Show image button
+    if st.button("Show Image"):
+        if 'uploaded_image' in st.session_state:
+            st.image(st.session_state['uploaded_image'], use_column_width=True)
+
     # Predict button
-    elif st.button("Predict") and test_image is not None:
-        st.snow()
-        st.write("Our Prediction")
-        result_index = model_prediction(test_image)
-        # Reading Labels
-        with open("labels.txt") as f:
-            content = f.readlines()
-        label = [i.strip() for i in content]
-        st.success('Model is Predicting it\'s a "{}"'.format(label[result_index]))
+    if st.button("Predict"):
+        if 'uploaded_image' in st.session_state:
+            st.image(st.session_state['uploaded_image'], use_column_width=True)  # Keep showing image
+            st.snow()
+            st.write("Our Prediction")
+
+            result_index = model_prediction(st.session_state['uploaded_image'])
+
+            with open("labels.txt") as f:
+                content = f.readlines()
+            label = [i.strip() for i in content]
+
+            st.success(f'Model is Predicting it\'s a "{label[result_index]}"')
+        else:
+            st.warning("Please upload and show an image first.")
+
 
