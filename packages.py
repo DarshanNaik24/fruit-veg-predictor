@@ -1,17 +1,7 @@
-# packages.py
-import pkg_resources
+import subprocess
+import sys
 
-def install_packages():
-    packages = [
-        'tensorflow>=2.0.0',
-        # other dependencies
-    ]
-    for package in packages:
-        try:
-            pkg_resources.require(package)
-        except pkg_resources.DistributionNotFound:
-            import subprocess
-            subprocess.check_call(['pip', 'install', package])
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-if __name__ == '__main__':
-    install_packages()
+install("tensorflow-cpu==2.12.0")
