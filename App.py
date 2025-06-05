@@ -1,7 +1,6 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from PIL import Image
 
 
 # Set background image with blur and transparency using CSS
@@ -70,27 +69,16 @@ elif app_mode == "About Project":
 elif app_mode == "Prediction":
     st.header("Model Prediction")
     test_image = st.file_uploader("Choose an Image:")
-
-    if test_image is not None:
-        # Display image when either button is clicked
-        if st.button("Show Image") or st.button("Predict"):
-            # Convert to PIL Image
-            try:
-                image = Image.open(test_image)
-                st.image(image, use_column_width=True)
-
-                # If Predict button was clicked
-                if st.button._last_clicked == "Predict":
-                    st.snow()
-                    st.write("Our Prediction")
-                    result_index = model_prediction(test_image)
-
-                    # Reading Labels
-                    with open("labels.txt") as f:
-                        content = f.readlines()
-                    label = [i.strip() for i in content]
-                    st.success('Model is Predicting it\'s a "{}"'.format(label[result_index]))
-
-            except Exception as e:
-                st.error(f"Error processing image: {str(e)}")
+    if st.button("Show Image") and test_image is not None:
+        st.image(test_image, width=4, use_column_width=True)
+    # Predict button
+    elif st.button("Predict") and test_image is not None:
+        st.snow()
+        st.write("Our Prediction")
+        result_index = model_prediction(test_image)
+        # Reading Labels
+        with open("labels.txt") as f:
+            content = f.readlines()
+        label = [i.strip() for i in content]
+        st.success('Model is Predicting it\'s a "{}"'.format(label[result_index]))
 
